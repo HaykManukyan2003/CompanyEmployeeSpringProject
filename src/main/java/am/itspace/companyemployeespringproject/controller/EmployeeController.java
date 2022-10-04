@@ -24,6 +24,7 @@ import java.util.Optional;
 public class EmployeeController {
 
     private final EmployeeRepository employeeRepository;
+
     private final CompanyRepository companyRepository;
 
     @Value("${companyEmployeeProject.images.folder}")
@@ -49,8 +50,13 @@ public class EmployeeController {
 
     @PostMapping("/employee/add")
     public String addEmployee(@ModelAttribute Employee employee,
-                              @RequestParam("image") MultipartFile file) throws IOException {
+                              @RequestParam("image") MultipartFile file,
+                              ModelMap modelMap) throws IOException {
         if (!file.isEmpty() && file.getSize() > 0) {
+            if (file.getContentType() != null && !file.getContentType().contains("image")) {
+                modelMap.addAttribute("fileContentTypeError", "wrong file content type");
+                return "addEmployee";
+            }
             String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
             File newFile = new File(folderPath + fileName);
             file.transferTo(newFile);
