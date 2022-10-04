@@ -11,6 +11,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
@@ -45,12 +46,15 @@ public class UserController {
     }
 
     @GetMapping("/loginPage")
-    public String goToLoginPage() {
+    public String goToLoginPage(@RequestParam(value = "error", required = false) String error, ModelMap modelMap) {
+        if (error != null && error.equals("true")) {
+            modelMap.addAttribute("error", "true");
+        }
         return "loginPage";
     }
 
-    @PostMapping("/login")
-    public String login(@AuthenticationPrincipal CurrentUser currentUser) {
-        return currentUser == null ? "loginPage" : "index";
+    @PostMapping("/loginPage")
+    public String login() {
+        return "index";
     }
 }

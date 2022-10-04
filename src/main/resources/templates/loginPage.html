@@ -131,8 +131,9 @@
     <div class="shape"></div>
 </div>
 
-<form action="/login" method="post">
+<form action="/loginPage" method="post">
     <h3>Login Here</h3>
+    <span style="color: #ff512f" th:if="${error != null}">Invalid username or password</span>
 
     <label for="username">Username</label>
     <input type="text" name="username" placeholder="Email" id="username">
